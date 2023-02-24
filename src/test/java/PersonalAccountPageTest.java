@@ -1,41 +1,31 @@
-import Pages.LoginPage;
-import Pages.MainPage;
-import Pages.PersonalAccountPage;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.hamcrest.MatcherAssert;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import pages.LoginPage;
+import pages.MainPage;
+import pages.PersonalAccountPage;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-
-
 import static org.hamcrest.CoreMatchers.containsString;
-
 
 @RunWith(Parameterized.class)
 public class PersonalAccountPageTest {
 
     private final String email;
     private final String password;
-
     private final String personalAccUrl;
     private final String loginUrl;
     private final String constructorUrl;
-
     private final String profileUrl;
-
-
+    private WebDriver driver;
 
     public PersonalAccountPageTest(String email, String password, String personalAccUrl, String constructorUrl, String loginUrl, String profileUrl) {
         this.email = email;
@@ -46,17 +36,15 @@ public class PersonalAccountPageTest {
         this.profileUrl = profileUrl;
     }
 
-    WebDriver driver;
-
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0} {1} {2} {3} {4} {5}")
     public static Object[][] getCostumersData() {
-        return new Object[][] {
-                { "vladimir@yandex.ru", "123456", "https://stellarburgers.nomoreparties.site/account", "https://stellarburgers.nomoreparties.site/", "https://stellarburgers.nomoreparties.site/login", "https://stellarburgers.nomoreparties.site/account/profile"},
+        return new Object[][]{
+                {"vladimir@yandex.ru", "123456", "https://stellarburgers.nomoreparties.site/account", "https://stellarburgers.nomoreparties.site/", "https://stellarburgers.nomoreparties.site/login", "https://stellarburgers.nomoreparties.site/account/profile"},
         };
     }
 
     @Before
-    public void startDriver () throws InterruptedException {
+    public void startDriver() throws InterruptedException {
         //Драйвер Яндекс
         //System.setProperty("webdriver.chrome.driver","src/main/resources/yandexdriver");
         driver = new ChromeDriver();
@@ -85,7 +73,8 @@ public class PersonalAccountPageTest {
 
 
     @Test
-    public void goToConstructorTest () throws InterruptedException  {
+    @DisplayName("Переход по клику на «Конструктор»")
+    public void goToConstructorTest() throws InterruptedException {
         // создать объект класса главной страницы
         MainPage objMainPage = new MainPage(driver);
         // создать объект класса страницы Личный кабинет
@@ -94,11 +83,12 @@ public class PersonalAccountPageTest {
         String currentUrl = driver.getCurrentUrl();
         String constructorText = objMainPage.getOConstructorText();
         Assert.assertEquals(constructorUrl, currentUrl);
-        MatcherAssert.assertThat(constructorText, containsString("Конструктор"));
+        Assert.assertThat(constructorText, containsString("Конструктор"));
     }
 
     @Test
-    public void goToConstructorWithLogoTest () throws InterruptedException {
+    @DisplayName("Переход по клику на логотип Stellar Burgers")
+    public void goToConstructorWithLogoTest() throws InterruptedException {
         // создать объект класса главной страницы
         MainPage objMainPage = new MainPage(driver);
         // создать объект класса страницы Личный кабинет
@@ -107,11 +97,12 @@ public class PersonalAccountPageTest {
         String currentUrl = driver.getCurrentUrl();
         String constructorText = objMainPage.getOConstructorText();
         Assert.assertEquals(constructorUrl, currentUrl);
-        MatcherAssert.assertThat(constructorText, containsString("Конструктор"));
+        Assert.assertThat(constructorText, containsString("Конструктор"));
     }
 
     @Test
-    public void exitFromAccountTest () throws InterruptedException {
+    @DisplayName("Выход по кнопке «Выйти» в личном кабинете")
+    public void exitFromAccountTest() throws InterruptedException {
         // создать объект класса страницы Личный кабине
         driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
         PersonalAccountPage personalAccountPage = new PersonalAccountPage(driver);

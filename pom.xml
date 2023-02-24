@@ -84,7 +84,7 @@
                     </properties>
                     <systemProperties>
                         <property>
-                            <!-- папка, в которую будут генерироваться отчёты Allure -->
+                            <!-- папка, в которую будет генерироваться отчёт Allure -->
                             <name>allure.results.directory</name>
                             <value>${project.build.directory}/allure-results</value>
                         </property>

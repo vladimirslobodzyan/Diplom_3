@@ -1,46 +1,42 @@
-import Pages.LoginPage;
-import Pages.MainPage;
-import Pages.RegisterPage;
+import io.qameta.allure.junit4.DisplayName;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hamcrest.MatcherAssert;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-
+import pages.LoginPage;
+import pages.MainPage;
+import pages.RegisterPage;
 import java.util.concurrent.TimeUnit;
-
 import static org.hamcrest.CoreMatchers.containsString;
 
 @RunWith(Parameterized.class)
 public class NegativeRegistrationPageTest {
-    private  String name;
-    private  String email;
-    private  String password;
     private final int passNumbers;
+    private WebDriver driver;
+    private String name;
+    private String email;
+    private String password;
 
     public NegativeRegistrationPageTest(int passNumbers) {
         this.passNumbers = passNumbers;
     }
 
-
-    WebDriver driver;
-
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0}")
     public static Object[][] setTestData() {
-        return new Object[][] {
+        return new Object[][]{
                 {5},
                 {3},
                 {1},
         };
     }
 
-
     @Before
-    public void startDriver () {
+    public void startDriver() {
         //Драйвер Яндекс
         //System.setProperty("webdriver.chrome.driver","src/main/resources/yandexdriver");
         driver = new ChromeDriver();
@@ -60,7 +56,8 @@ public class NegativeRegistrationPageTest {
     }
 
     @Test
-    public void invalidRegistrationTest () throws InterruptedException {
+    @DisplayName("Ошибка для некорректного пароля")
+    public void invalidRegistrationTest() throws InterruptedException {
         // создать объект класса главной страницы
         MainPage objMainPage = new MainPage(driver);
         email = RandomStringUtils.randomAlphanumeric(8) + "@yandex.ru";
@@ -82,6 +79,6 @@ public class NegativeRegistrationPageTest {
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         //получение текста из подтверждения заказа
         String orderText = registerPage.getInvalidPasswordText();
-        MatcherAssert.assertThat(orderText, containsString("Некорректный пароль"));
+        Assert.assertThat(orderText, containsString("Некорректный пароль"));
     }
 }

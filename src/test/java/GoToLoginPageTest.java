@@ -1,9 +1,4 @@
-import Pages.LoginPage;
-import Pages.MainPage;
-import Pages.RecoveryPage;
-import Pages.RegisterPage;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.hamcrest.MatcherAssert;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,31 +7,31 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-
+import pages.LoginPage;
+import pages.MainPage;
+import pages.RecoveryPage;
+import pages.RegisterPage;
 import java.util.concurrent.TimeUnit;
-
 import static org.hamcrest.CoreMatchers.containsString;
-
 
 @RunWith(Parameterized.class)
 public class GoToLoginPageTest {
-    WebDriver driver;
-
     private final String constructorUrl;
+    private WebDriver driver;
 
     public GoToLoginPageTest(String constructorUrl) {
         this.constructorUrl = constructorUrl;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0}")
     public static Object[][] getCostumersData() {
-        return new Object[][] {
-                { "https://stellarburgers.nomoreparties.site/login"},
+        return new Object[][]{
+                {"https://stellarburgers.nomoreparties.site/login"},
         };
     }
 
     @Before
-    public void startDriver () {
+    public void startDriver() {
         //Драйвер Яндекс
         //System.setProperty("webdriver.chrome.driver","src/main/resources/yandexdriver");
         driver = new ChromeDriver();
@@ -48,8 +43,6 @@ public class GoToLoginPageTest {
         driver.get("https://stellarburgers.nomoreparties.site/");
         // создать объект класса главной страницы
         MainPage objMainPage = new MainPage(driver);
-
-
     }
 
     @After
@@ -58,7 +51,8 @@ public class GoToLoginPageTest {
     }
 
     @Test
-    public void goToLoginWithAccauntButtonTest () throws InterruptedException {
+    @DisplayName("Вход по кнопке Войти")
+    public void goToLoginWithAccauntButtonTest() throws InterruptedException {
         // создать объект класса главной страницы
         MainPage objMainPage = new MainPage(driver);
         // Нажали на кнопку войти в аккаунт
@@ -69,11 +63,12 @@ public class GoToLoginPageTest {
         String orderText = loginPage.getOrderSocsessText();
         String currentUrl = driver.getCurrentUrl();
         Assert.assertEquals(constructorUrl, currentUrl);
-        MatcherAssert.assertThat(orderText, containsString("Вход"));
+        Assert.assertThat(orderText, containsString("Вход"));
     }
 
     @Test
-    public void goToLoginWithPersonalAccountButtonTest () throws InterruptedException {
+    @DisplayName("Вход по кнопке Личный кабинет")
+    public void goToLoginWithPersonalAccountButtonTest() throws InterruptedException {
         // создать объект класса главной страницы
         MainPage objMainPage = new MainPage(driver);
         // Нажали на кнопку войти в аккаунт
@@ -84,11 +79,12 @@ public class GoToLoginPageTest {
         String orderText = loginPage.getOrderSocsessText();
         String currentUrl = driver.getCurrentUrl();
         Assert.assertEquals(constructorUrl, currentUrl);
-        MatcherAssert.assertThat(orderText, containsString("Вход"));
+        Assert.assertThat(orderText, containsString("Вход"));
     }
 
     @Test
-    public void goToLoginWithEnterLink () throws InterruptedException {
+    @DisplayName("Вход через кнопку в форме регистрации")
+    public void goToLoginWithEnterLink() throws InterruptedException {
         // создать объект класса главной страницы
         MainPage objMainPage = new MainPage(driver);
         // Нажали на кнопку войти в аккаунт
@@ -107,11 +103,12 @@ public class GoToLoginPageTest {
         String orderText = loginPage.getOrderSocsessText();
         String currentUrl = driver.getCurrentUrl();
         Assert.assertEquals(constructorUrl, currentUrl);
-        MatcherAssert.assertThat(orderText, containsString("Вход"));
+        Assert.assertThat(orderText, containsString("Вход"));
     }
 
     @Test
-    public void LoginFromRecoveryPageTest () throws InterruptedException {
+    @DisplayName("Вход через кнопку в форме восстановления пароля")
+    public void LoginFromRecoveryPageTest() throws InterruptedException {
         // создать объект класса главной страницы
         MainPage objMainPage = new MainPage(driver);
         // Нажали на кнопку войти в аккаунт
@@ -130,6 +127,6 @@ public class GoToLoginPageTest {
         String orderText = loginPage.getOrderSocsessText();
         String currentUrl = driver.getCurrentUrl();
         Assert.assertEquals(constructorUrl, currentUrl);
-        MatcherAssert.assertThat(orderText, containsString("Вход"));
+        Assert.assertThat(orderText, containsString("Вход"));
     }
 }
